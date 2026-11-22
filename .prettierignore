@@ -1,0 +1,10 @@
+node_modules
+out
+dist
+pnpm-lock.yaml
+test-results
+README.md
+src-tauri/target
+src-tauri/gen
+src-tauri/Cargo.lock
+src-tauri/vendor

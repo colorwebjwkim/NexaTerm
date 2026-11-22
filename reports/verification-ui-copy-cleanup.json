@@ -1,0 +1,24 @@
+{
+  "typecheck": "passed without warnings",
+  "workspaceScreen": "visually reviewed",
+  "lint": "passed",
+  "releaseSmoke": "passed",
+  "essentialWarningsAndHostTrust": "retained",
+  "format": "passed",
+  "checkedDate": "2026-10-14",
+  "change": "Remove marketing, development and redundant technical UI copy",
+  "artifacts": [
+    {
+      "bytes": 15001088,
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\nexaterm.exe",
+      "sha256": "E06D266C2527A0E2B9C9448F956BC0D9E033D2C7BBA0EF3FBB9A85BAB386FBCE"
+    },
+    {
+      "bytes": 3966842,
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\bundle\\nsis\\NexaTerm_0.3.0_x64-setup.exe",
+      "sha256": "F05E9DBD9852F80490EBD44BC89963375357AB7E56E262E9047F43B4D5ED3215"
+    }
+  ],
+  "removedCopyAbsence": "passed",
+  "desktopE2E": "passed"
+}

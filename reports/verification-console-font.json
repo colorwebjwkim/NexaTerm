@@ -1,0 +1,26 @@
+{
+  "artifacts": [
+    {
+      "bytes": 14877184,
+      "sha256": "EF2326D7365C97D8224B5CFA1F6020D5F165054846FB4237581F61F4C47ACD4E",
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\nexaterm.exe"
+    },
+    {
+      "bytes": 3884549,
+      "sha256": "1876DCDD20792C477CCD259958FF4BD266631FDD9499B44274A8390759ACF2CA",
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\bundle\\nsis\\NexaTerm_0.3.0_x64-setup.exe"
+    }
+  ],
+  "lint": "passed",
+  "allTabsFontUpdate": "passed",
+  "format": "passed",
+  "ordinaryWheelDoesNotZoom": "passed",
+  "sshWindowResize": "passed",
+  "ctrlWheelBothDirections": "passed",
+  "desktopE2E": "passed",
+  "fontPersistsAcrossRestart": "passed",
+  "checkedDate": "2026-10-14",
+  "change": "Console Ctrl wheel and status bar magnifier font controls",
+  "releaseSmoke": "passed",
+  "typecheck": "passed"
+}

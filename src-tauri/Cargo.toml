@@ -1,0 +1,47 @@
+[package]
+name = "nexaterm"
+version = "0.3.3"
+edition = "2024"
+rust-version = "1.99"
+
+[lib]
+name = "nexaterm_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[features]
+custom-protocol = ["tauri/custom-protocol"]
+
+[build-dependencies]
+tauri-build = { version = "=2.7.2", features = [] }
+
+[dependencies]
+tauri = { version = "=2.12.3", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+rusqlite = { version = "=0.40.2", features = ["bundled"] }
+russh = { version = "=0.64.1", default-features = false, features = ["ring", "rsa"] }
+russh-sftp = "=3.0.1"
+tokio-util = "0.7"
+aes-gcm = "=0.10.3"
+argon2 = "=0.5.3"
+rand = "0.8"
+base64 = "0.22"
+zeroize = { version = "1", features = ["derive"] }
+rfd = "=0.17.2"
+tempfile = "3"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "=0.61.2", features = ["Win32_Security_Cryptography", "Win32_Foundation", "Win32_System_Memory", "Win32_Storage_FileSystem", "Win32_UI_Controls", "Win32_UI_WindowsAndMessaging"] }
+
+[dev-dependencies]
+rand_new = { package = "rand", version = "0.10" }
+
+[profile.release]
+strip = true
+lto = "thin"
+codegen-units = 1
+
+[patch.crates-io]
+russh-sftp = { path = "vendor/russh-sftp" }

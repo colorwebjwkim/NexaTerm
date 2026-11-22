@@ -1,0 +1,28 @@
+{
+  "desktopE2E": "passed",
+  "repeatedGrantsReused": "passed",
+  "missingOrInvalidLocationFallback": "passed",
+  "typecheck": "passed without warnings",
+  "checkedDate": "2026-10-14",
+  "rustTestsPassed": 10,
+  "change": "SFTP Documents default and persistent last local folder",
+  "format": "passed",
+  "actualWindowsDocumentsDefault": "matched in isolated native app",
+  "clippy": "passed with warnings denied",
+  "lint": "passed",
+  "artifacts": [
+    {
+      "bytes": 15002112,
+      "sha256": "D9A460D784D2AA5F04A16C99D4B36471DE0012315271DC053EC4A062FE3121BA",
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\nexaterm.exe"
+    },
+    {
+      "bytes": 3966047,
+      "sha256": "3E0A00CFD8969128B94CAD18156451DEFAF9D21083F415EE236F5DCEDB8267D9",
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\bundle\\nsis\\NexaTerm_0.3.0_x64-setup.exe"
+    }
+  ],
+  "localPathExcludedFromBackup": "passed",
+  "releaseSmoke": "passed",
+  "restartAndReopenLastLocation": "passed"
+}

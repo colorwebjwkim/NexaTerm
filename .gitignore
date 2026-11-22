@@ -1,0 +1,23 @@
+node_modules/
+out/
+dist/
+coverage/
+test-results/
+playwright-report/
+*.log
+.env*
+src-tauri/target/
+src-tauri/gen/
+
+# Local deployment, recovery, and test artifacts
+reports/*
+!reports/*.json
+*.db
+*.db-shm
+*.db-wal
+*.exe
+*.msi
+*.nxtbackup
+*.pem
+*.key
+*.pfx

@@ -1,0 +1,28 @@
+{
+  "splitterDragAndKeyboard": "passed",
+  "desktopE2E": "passed",
+  "compactViewport": "1100x650 passed",
+  "artifacts": [
+    {
+      "bytes": 14878720,
+      "sha256": "C6BC77267B2F2A211C0B45FD13AB3A172BA962CE2B213E6C2E74DB0155BEF1F5",
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\nexaterm.exe"
+    },
+    {
+      "bytes": 3888596,
+      "sha256": "E54BE80D5B80AD3B77A97A214A5526D0ED9C2AEDA3C13D58F45AA274E4D45CD0",
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\bundle\\nsis\\NexaTerm_0.3.0_x64-setup.exe"
+    }
+  ],
+  "format": "passed",
+  "sshWindowResize": "passed",
+  "lint": "passed",
+  "change": "Independent SSH SFTP scrolling and draggable vertical split",
+  "remoteListScroll100Files": "passed",
+  "checkedDate": "2026-10-14",
+  "outerScrollbarAbsent": "passed",
+  "splitRetainedWhenReopening": "passed",
+  "typecheck": "passed without warnings",
+  "releaseSmoke": "passed",
+  "splitterDoubleClickReset": "passed"
+}

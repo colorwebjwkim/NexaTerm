@@ -1,0 +1,25 @@
+{
+  "checkedDate": "2026-10-14",
+  "persistentTransferNote": "absent",
+  "lint": "passed",
+  "localPathAndTooltip": "matched ordinary Windows path",
+  "desktopE2E": "passed",
+  "typecheck": "passed without warnings",
+  "splitAndTransferRegression": "passed",
+  "artifacts": [
+    {
+      "bytes": 14878720,
+      "sha256": "B996A25158D6F1B016C755276E9D70BC11FEDBDE44800264D7305D6B1900296B",
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\nexaterm.exe"
+    },
+    {
+      "bytes": 3887941,
+      "sha256": "3096626EC9DC7A073AA3BCA5DD17E7DFC784EFA87055A2D01B2586717BDB5C34",
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\bundle\\nsis\\NexaTerm_0.3.0_x64-setup.exe"
+    }
+  ],
+  "change": "SFTP local path display and removal of persistent transfer note",
+  "populatedLocalListEmptyMessage": "absent",
+  "releaseSmoke": "passed",
+  "format": "passed"
+}

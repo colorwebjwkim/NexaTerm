@@ -1,0 +1,30 @@
+{
+  "legacyProfilesAndBackup": "passed",
+  "sftpScreen": "visually reviewed",
+  "rustTestsPassed": 11,
+  "releaseSmoke": "passed",
+  "artifacts": [
+    {
+      "bytes": 15022080,
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\nexaterm.exe",
+      "sha256": "25AFF88EDB803189BB35E47FA14D251C817EBEB1F8D478EDA63CEE79CFBA9588"
+    },
+    {
+      "bytes": 3969895,
+      "path": "C:\\workspace\\NexaTerm\\src-tauri\\target\\release\\bundle\\nsis\\NexaTerm_0.3.0_x64-setup.exe",
+      "sha256": "D86F755B74B577BE336DFF207257F983F7FEE40DE4F488227F01CD6AF489CE65"
+    }
+  ],
+  "ptyAndShellRequests": "none for SFTP mode",
+  "typecheck": "passed without warnings",
+  "lint": "passed",
+  "sftpOnlyServer": "loopback ssh2 with PTY and shell rejected",
+  "subsystemRejection": "reported",
+  "uploadAndDownload": "passed",
+  "format": "passed",
+  "change": "Standalone SFTP connection mode",
+  "restartModePersistence": "passed",
+  "checkedDate": "2026-10-14",
+  "clippy": "passed with warnings denied",
+  "desktopE2E": "passed"
+}

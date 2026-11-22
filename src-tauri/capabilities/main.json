@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main",
+  "description": "Local NexaTerm window only; no filesystem or shell plugin permissions",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}
