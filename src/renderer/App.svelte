@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte'
+  import { getCurrentWindow } from '@tauri-apps/api/window'
   import { SvelteMap } from 'svelte/reactivity'
   import { version as appVersion } from '../../package.json'
   import SftpPane from './components/SftpPane.svelte'
@@ -14,6 +15,7 @@
     type Profile,
     type Preview,
     type SessionEvent,
+    type Settings,
   } from './api'
   import TerminalView, {
     type TerminalHandle,
@@ -34,7 +36,7 @@
   let view = $state<AppView>({
     profiles: [],
     settings: {
-      theme: 'dark',
+      theme: 'system',
       fontSize: 14,
       scrollback: 5000,
       confirmExit: true,
@@ -111,8 +113,33 @@
       '비밀번호 인증이 거부되었습니다. 계정과 비밀번호를 확인하고 다시 입력하세요.'
     dialog = 'connect'
   })
-  let settingsDraft = $state({
-    theme: 'dark' as 'dark' | 'light',
+  const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  let systemDark = $state(systemThemeQuery.matches)
+  let effectiveTheme = $derived(
+    view.settings.theme === 'system'
+      ? systemDark
+        ? 'dark'
+        : 'light'
+      : view.settings.theme,
+  )
+  let terminalSettings = $derived({ ...view.settings, theme: effectiveTheme })
+  onMount(() => {
+    const changed = (event: MediaQueryListEvent) => {
+      systemDark = event.matches
+    }
+    systemThemeQuery.addEventListener('change', changed)
+    systemDark = systemThemeQuery.matches
+    return () => systemThemeQuery.removeEventListener('change', changed)
+  })
+  $effect(() => {
+    if (!ready) return
+    const theme = view.settings.theme
+    void getCurrentWindow()
+      .setTheme(theme === 'system' ? null : theme)
+      .catch(fail)
+  })
+  let settingsDraft = $state<Settings>({
+    theme: 'system',
     fontSize: 14,
     scrollback: 5000,
     confirmExit: true,
@@ -269,6 +296,19 @@
           disabled: !terminalAvailable,
           action: () => {
             if (active) handles.get(active.id)?.clear()
+          },
+        },
+        {
+          label: 'Windows 테마 따르기',
+          separator: true,
+          checked: view.settings.theme === 'system',
+          disabled: !ready || busy,
+          action: () => {
+            if (view.settings.theme === 'system') return
+            void action(async () => {
+              await fontSave
+              view = await api.settings({ ...view.settings, theme: 'system' })
+            })
           },
         },
       ],
@@ -688,9 +728,24 @@
   }
   onMount(() => {
     window.addEventListener('keydown', shortcut, true)
-    return () => window.removeEventListener('keydown', shortcut, true)
+    window.addEventListener('contextmenu', restrictContextMenu, true)
+    return () => {
+      window.removeEventListener('keydown', shortcut, true)
+      window.removeEventListener('contextmenu', restrictContextMenu, true)
+    }
   })
+  function restrictContextMenu(event: MouseEvent) {
+    if (event.target instanceof Element && event.target.closest('.xterm'))
+      return
+    event.preventDefault()
+  }
   function shortcut(e: KeyboardEvent) {
+    if (e.altKey && e.key === 'F4' && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      if (!e.repeat) void getCurrentWindow().close().catch(fail)
+      return
+    }
     if (closingTab) {
       if (e.key === 'Escape' && !closingBusy) closingTab = null
       return
@@ -781,7 +836,7 @@
 <div
   class="workspace"
   class:sidebar-collapsed={!serverListOpen}
-  data-theme={view.settings.theme}
+  data-theme={effectiveTheme}
 >
   <header>
     <MenuBar
@@ -1010,7 +1065,7 @@
                   {#if tab.connectionId}<TerminalView
                       connectionId={tab.connectionId}
                       connected={tab.state === 'connected'}
-                      settings={view.settings}
+                      settings={terminalSettings}
                       register={(handle) => register(tab.id, handle)}
                       reportError={fail}
                       {changeFontSize}
@@ -1489,9 +1544,10 @@
             }}
           >
             <label
-              >테마<select bind:value={settingsDraft.theme}
-                ><option value="dark">어두운 테마</option><option value="light"
-                  >밝은 테마</option
+              >테마<select aria-label="테마" bind:value={settingsDraft.theme}
+                ><option value="system">시스템 설정 따르기 (Windows)</option
+                ><option value="dark">다크</option><option value="light"
+                  >라이트</option
                 ></select
               ></label
             ><label

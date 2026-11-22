@@ -82,7 +82,14 @@
     }
     resizeTerminal = resize
     terminal.attachCustomKeyEventHandler(
-      (event) => !(event.ctrlKey && event.key === 'Tab'),
+      (event) =>
+        !(event.ctrlKey && event.key === 'Tab') &&
+        !(
+          event.altKey &&
+          event.key === 'F4' &&
+          !event.ctrlKey &&
+          !event.metaKey
+        ),
     )
     const input = terminal.onData((data) => {
       if (!connected) return

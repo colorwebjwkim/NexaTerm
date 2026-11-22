@@ -3,5 +3,9 @@
   "identifier": "main",
   "description": "Local NexaTerm window only; no filesystem or shell plugin permissions",
   "windows": ["main"],
-  "permissions": ["core:default"]
+  "permissions": [
+    "core:default",
+    "core:window:allow-set-theme",
+    "core:window:allow-close"
+  ]
 }

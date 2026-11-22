@@ -8,6 +8,17 @@
 }
 body {
   margin: 0;
+  user-select: none;
+}
+/* Keep editable and copyable content selectable; xterm manages its own selection. */
+input,
+textarea,
+[contenteditable='true'],
+pre,
+code,
+.error,
+.session-error {
+  user-select: text;
 }
 button,
 input,
@@ -63,6 +74,7 @@ input[aria-invalid='true'] {
   line-height: 1.5;
 }
 .workspace {
+  color-scheme: dark;
   --bg: #11141e;
   --panel: #191e2c;
   --text: #edf0f8;

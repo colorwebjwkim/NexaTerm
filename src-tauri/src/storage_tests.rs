@@ -6,6 +6,35 @@ use crate::{
 use zeroize::Zeroizing;
 
 #[test]
+fn theme_defaults_persistence_backup_and_validation() {
+    assert_eq!(crate::models::Settings::default().theme, "system");
+    let directory = tempfile::tempdir().unwrap();
+    let database = directory.path().join("theme.db");
+    for theme in ["dark", "light", "system"] {
+        let store = Store::open(&database).unwrap();
+        let mut settings = store.read().unwrap().settings;
+        settings.theme = theme.into();
+        store.save_settings(settings).unwrap();
+        drop(store);
+        let store = Store::open(&database).unwrap();
+        let snapshot = store.read().unwrap();
+        assert_eq!(snapshot.settings.theme, theme);
+        let encoded = backup::encode(&snapshot, "fixture-theme-backup", false).unwrap();
+        let payload = backup::decode(&encoded, "fixture-theme-backup").unwrap();
+        let decoded: backup::Backup = serde_json::from_slice(&payload).unwrap();
+        backup::validate(&decoded).unwrap();
+        assert_eq!(decoded.snapshot.settings.theme, theme);
+        let restored_store = Store::open(&directory.path().join("restored.db")).unwrap();
+        let restored = backup::restore(&restored_store, &payload, "replace").unwrap();
+        assert_eq!(restored.settings.theme, theme);
+        let mut invalid = decoded.snapshot.settings.clone();
+        invalid.theme = "invalid".into();
+        assert!(store.save_settings(invalid).is_err());
+        assert_eq!(store.read().unwrap().settings.theme, theme);
+    }
+}
+
+#[test]
 fn exit_confirmation_defaults_and_survives_restart() {
     let legacy: crate::models::Settings =
         serde_json::from_str(r#"{"theme":"dark","fontSize":14,"scrollback":5000}"#).unwrap();

@@ -4,6 +4,7 @@ import { mkdtemp, readFile, mkdir, writeFile } from 'node:fs/promises'
 import { serveSftp } from './sftp-fixture.mjs'
 import { exerciseSftp } from './sftp-checks.mjs'
 import { exerciseLayout, expectTerminalFits } from './layout-checks.mjs'
+import { exerciseTheme, expectTheme } from './theme-checks.mjs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import ssh2 from 'ssh2'
@@ -709,6 +710,7 @@ test('Windows WebView: protected password, SSH trust, independent tabs and setti
       .click()
     await page.getByRole('dialog').getByRole('combobox').selectOption('dark')
     await page.getByRole('button', { name: '설정 저장', exact: true }).click()
+    await exerciseTheme(page)
     await expect(
       page.getByRole('button', { name: '시작', exact: true }),
     ).toHaveCount(0)
@@ -723,6 +725,17 @@ test('Windows WebView: protected password, SSH trust, independent tabs and setti
     await expect(page.locator('.server-name')).toHaveText('로컬 SSH 검증')
     await stop()
     page = await launch()
+    await page.emulateMedia({ colorScheme: 'light' })
+    await expectTheme(page, 'light')
+    await page.emulateMedia({ colorScheme: 'dark' })
+    await expectTheme(page, 'dark')
+    await page.getByRole('menuitem', { name: '도구', exact: true }).click()
+    await page
+      .getByRole('menuitem', { name: '환경 설정…', exact: true })
+      .click()
+    await expect(page.getByLabel('테마', { exact: true })).toHaveValue('system')
+    await page.getByRole('button', { name: '취소', exact: true }).click()
+    await page.emulateMedia({ colorScheme: null })
     await page.getByRole('button', { name: '편집', exact: true }).click()
     await expect(page.getByLabel('접속 방식')).toHaveValue('sftp')
     await page
@@ -807,6 +820,40 @@ test('Windows WebView: protected password, SSH trust, independent tabs and setti
     console.log(
       'SFTP_ONLY_VERIFIED shell_and_pty=never_requested restart_mode=preserved upload=passed subsystem_rejection=reported',
     )
+    behavior.sftpOnly = false
+    behavior.rejectSftp = false
+    await page.getByRole('button', { name: '편집', exact: true }).click()
+    await page.getByLabel('접속 방식').selectOption('ssh')
+    await page.getByRole('button', { name: '프로필 저장', exact: true }).click()
+    await page.locator('.server-connect').click()
+    await expect(
+      page.locator('.terminal-pane:not(.hidden) .xterm'),
+    ).toBeVisible()
+    await page.getByRole('menuitem', { name: '도구', exact: true }).click()
+    await page
+      .getByRole('menuitem', { name: '환경 설정…', exact: true })
+      .click()
+    await page
+      .getByRole('checkbox', {
+        name: '활성 연결이 있을 때 앱 종료 확인창 표시',
+      })
+      .uncheck()
+    await page.getByRole('button', { name: '설정 저장', exact: true }).click()
+    await page
+      .locator('.terminal-pane:not(.hidden) .xterm-helper-textarea')
+      .focus()
+    await page.keyboard.press('Alt+F4')
+    await expect.poll(() => app.exitCode, { timeout: 15000 }).not.toBeNull()
+    console.log(
+      'ALT_F4_VERIFIED terminal_focus=closed confirmation_disabled=respected',
+    )
+    await stop()
+    page = await launch()
+    await expect(page.locator('footer')).toContainText('활성 연결 0')
+    await page.getByRole('textbox', { name: '서버 검색' }).focus()
+    await page.keyboard.press('Alt+F4')
+    await expect.poll(() => app.exitCode, { timeout: 15000 }).not.toBeNull()
+    console.log('ALT_F4_NO_SESSION_VERIFIED app=closed')
     console.log(
       'DESKTOP_VERIFIED profiles=1 independent_connections=2 plaintext_password=absent',
     )

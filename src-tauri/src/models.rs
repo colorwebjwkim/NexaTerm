@@ -42,7 +42,7 @@ fn default_confirm_exit() -> bool {
 impl Default for Settings {
     fn default() -> Self {
         Self {
-            theme: "dark".into(),
+            theme: "system".into(),
             font_size: 14,
             scrollback: 5000,
             confirm_exit: true,
@@ -75,7 +75,7 @@ impl Snapshot {
         {
             return Err("항목 수 제한을 초과했습니다".into());
         }
-        if !["dark", "light"].contains(&self.settings.theme.as_str())
+        if !["system", "dark", "light"].contains(&self.settings.theme.as_str())
             || !(10..=28).contains(&self.settings.font_size)
             || !(100..=20000).contains(&self.settings.scrollback)
         {

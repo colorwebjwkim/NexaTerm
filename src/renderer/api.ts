@@ -15,7 +15,7 @@ export interface Profile {
   hostKeyAlgorithm: string
 }
 export interface Settings {
-  theme: 'dark' | 'light'
+  theme: 'system' | 'dark' | 'light'
   fontSize: number
   scrollback: number
   confirmExit: boolean
