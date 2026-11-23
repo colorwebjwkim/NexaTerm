@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, untrack } from 'svelte'
+  import { fileSelection } from '../fileSelection'
   import {
     files,
     size,
@@ -110,16 +111,6 @@
         remoteSelected = []
       }
     })
-  }
-  function select(side: string, name: string, checked: boolean) {
-    if (side === 'local')
-      localSelected = checked
-        ? [...localSelected, name]
-        : localSelected.filter((x) => x !== name)
-    else
-      remoteSelected = checked
-        ? [...remoteSelected, name]
-        : remoteSelected.filter((x) => x !== name)
   }
   async function transfer(direction: string) {
     await act(async () => {
@@ -266,8 +257,33 @@
             >{side === 'local' ? '업로드 →' : '← 다운로드'} ({selected.length})</button
           >
         </div>
-        <div class="file-table">
-          <table>
+        <div
+          class="file-table"
+          use:fileSelection={{
+            names: visibleEntries
+              .filter((entry) => !entry.blocked)
+              .map((entry) => entry.name),
+            selected,
+            path: listing.path,
+            open: (name) => {
+              const entry = listing.entries.find((entry) => entry.name === name)
+              if (entry?.directory && !entry.blocked) void navigate(side, entry)
+            },
+            up: () => {
+              void navigate(side, undefined, true)
+            },
+            change: (names) => {
+              if (side === 'local') localSelected = names
+              else remoteSelected = names
+            },
+          }}
+        >
+          <table
+            role="grid"
+            tabindex="0"
+            aria-label={side === 'local' ? '로컬 파일 목록' : '원격 파일 목록'}
+            aria-multiselectable="true"
+          >
             <thead
               ><tr
                 ><th class="check-col"
@@ -304,27 +320,37 @@
             ><tbody
               >{#each visibleEntries as entry (entry.name)}<tr
                   class:blocked={entry.blocked}
+                  class:selected={selected.includes(entry.name)}
+                  aria-selected={selected.includes(entry.name)}
+                  data-file-name={entry.name}
+                  ondblclick={(event) => {
+                    if (
+                      entry.directory &&
+                      !entry.blocked &&
+                      !(event.target instanceof HTMLInputElement)
+                    )
+                      void navigate(side, entry)
+                  }}
                   ><td
                     ><input
                       type="checkbox"
+                      tabindex="-1"
                       aria-label={`${side} ${entry.name} 선택`}
                       disabled={entry.blocked}
                       checked={selected.includes(entry.name)}
-                      onchange={(e) =>
-                        select(side, entry.name, e.currentTarget.checked)}
                     /></td
                   ><td
                     ><button
                       class="file-name"
+                      tabindex="-1"
                       disabled={entry.blocked}
-                      onclick={() => {
-                        if (entry.directory) void navigate(side, entry)
-                        else
-                          select(
-                            side,
-                            entry.name,
-                            !selected.includes(entry.name),
-                          )
+                      onclick={(event) => {
+                        if (
+                          event.detail === 0 &&
+                          entry.directory &&
+                          !entry.blocked
+                        )
+                          void navigate(side, entry)
                       }}
                       title={entry.blocked
                         ? '링크/특수 파일 또는 지원하지 않는 파일명'
@@ -483,6 +509,7 @@
     flex: 1;
   }
   .file-table {
+    position: relative;
     overflow: auto;
     overscroll-behavior: contain;
     flex: 1;
@@ -519,6 +546,26 @@
     max-width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  tr.selected td {
+    background: color-mix(in srgb, var(--accent) 22%, var(--panel));
+  }
+  .file-table:focus-within :global(tr.focused) {
+    outline: 1px solid var(--accent);
+    outline-offset: -1px;
+  }
+  table:focus {
+    outline: none;
+  }
+  tbody tr:not(.blocked) {
+    cursor: default;
+  }
+  .file-table :global(.file-selection-box) {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+    border: 1px solid var(--accent);
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
   }
   .blocked {
     opacity: 0.5;

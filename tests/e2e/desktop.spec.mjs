@@ -842,10 +842,13 @@ test('Windows WebView: protected password, SSH trust, independent tabs and setti
     await page
       .locator('.terminal-pane:not(.hidden) .xterm-helper-textarea')
       .focus()
+    await expect.poll(() => clients.size).toBeGreaterThan(0)
     await page.keyboard.press('Alt+F4')
     await expect.poll(() => app.exitCode, { timeout: 15000 }).not.toBeNull()
+    // Verify server-observed SSH closure before stop()/finally can clean up clients.
+    await expect.poll(() => clients.size, { timeout: 15000 }).toBe(0)
     console.log(
-      'ALT_F4_VERIFIED terminal_focus=closed confirmation_disabled=respected',
+      'ALT_F4_VERIFIED terminal_focus=closed confirmation_disabled=respected server_connections=0',
     )
     await stop()
     page = await launch()
