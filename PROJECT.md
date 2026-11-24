@@ -11,6 +11,13 @@
 
 ## 개발 및 검증 기록
 
+### 2026-11-25 v0.3.3 GitHub 릴리즈
+
+- 최신 소스에서 Windows x64 NSIS EXE와 MSI를 새로 빌드했다. 제품 버전은 0.3.3을 유지하며 첫 GitHub 릴리즈 태그는 `v0.3.3`이다. SFTP 마우스·키보드 선택과 Windows 테마·터미널·마우스 조작 개선을 포함한다.
+- 검증: 린트·전체 Prettier 서식·타입/Svelte 검사, Rust 테스트 17개, rustfmt와 clippy를 통과했다. SFTP 선택 UI 회귀 2개, `tauri build --bundles nsis,msi --ci`, release WebView 시작·메뉴·프로필 창·Rust IPC smoke 검사도 통과했다.
+- 배포 파일은 NSIS EXE·MSI와 두 파일의 SHA-256을 기록한 `SHA256SUMS.txt`다. [릴리즈 안내](docs/RELEASE-0.3.3.md)에 기능·다운로드·검증 제한을 기록했다.
+- 이번 작업에서 설치본 교체, 설치·업데이트·제거, 깨끗한 PC·실제 원격 서버 및 전체 Windows WebView E2E는 다시 검증하지 않았다. 이전 무연결 Alt+F4 E2E 실패는 미해결 상태이며 코드 서명은 없다.
+
 ### 2026-11-23 SFTP 키보드 탐색·선택
 
 - 배포·검증: 타입/Svelte 검사·린트·서식·Windows x64 release 빌드를 통과했다. 설치 EXE를 관리자 권한으로 교체하고 SHA-256 일치, 설치 경로의 실제 WebView 시작·메뉴·프로필 창·Rust IPC smoke 검사를 확인한 뒤 재실행했다. 이전 EXE와 설정 DB 두 개는 `reports/installed-update-20261123-100145-sftp-keyboard/`에 백업했으며 설정 DB 해시를 보존했다. 제품 버전은 0.3.3이다. 설치 패키지 재생성과 실제 SSH/SFTP 서버 연결 검증은 수행하지 않았다.

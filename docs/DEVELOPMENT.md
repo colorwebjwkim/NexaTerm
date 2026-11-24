@@ -2,11 +2,24 @@
 
 ## 실행 파일
 
+2026-11-25 GitHub v0.3.3 릴리즈용으로 최신 소스의 NSIS·MSI를 재생성하고 release WebView smoke 검사를 통과했다. 이번 릴리즈 작업에서는 설치본을 교체하지 않았다. 배포 파일과 제한은 [릴리즈 안내](RELEASE-0.3.3.md)를 참고한다.
+
 2026-11-23 이 PC의 설치본에 SFTP 탐색기 방식 마우스·키보드 선택(행 클릭·영역 드래그·방향키·Ctrl/Shift·전체 선택)을 추가 적용했다. 일반 UI 드래그 선택 방지와 터미널 외 오른쪽 클릭 메뉴 제한도 포함한다. release EXE를 직접 교체했으며 설치본 WebView의 시작·UI 검사와 설정 DB 해시 보존을 확인했다. 설치 패키지는 이번 작업에서 재생성하지 않았다. 상세 백업·검증 범위는 [프로젝트 기록](../PROJECT.md)을 참고한다.
 
 `src-tauri/target/release/nexaterm.exe`는 직접 실행하는 Windows x64 앱이다. 설치 파일 생성 명령은 `pnpm dist:win`이며 NSIS 결과는 `src-tauri/target/release/bundle/nsis`에 생성된다. 배포물은 아직 코드 서명이 없는 개발/검토용이다.
 
 현재 PC에는 WebView2가 설치되어 있다. 다른 PC의 직접 실행에는 WebView2가 필요하고, NSIS 설치기는 필요 시 WebView2 bootstrapper를 실행하므로 인터넷 접근이 필요할 수 있다. 오프라인 설치와 기업 정책 환경은 별도 검증 대상이다.
+
+## GitHub 릴리즈 생성
+
+v0.3.3 배포 파일과 지원 범위는 [릴리즈 안내](RELEASE-0.3.3.md)에 정리한다. 설치 파일은 이전 빌드를 재포장하지 않고 다음 명령으로 최신 소스에서 생성한다.
+
+```powershell
+pnpm exec tauri build --bundles nsis,msi --ci
+pnpm test:release
+```
+
+릴리즈에는 NSIS EXE, MSI와 두 파일의 SHA-256을 담은 `SHA256SUMS.txt`를 첨부한다. 검사 결과를 `PROJECT.md`에 기록하고 소스 커밋에 버전 태그를 연결한다. GitHub 초안에 모든 파일을 업로드한 뒤 게시한다. 패키징·실행 검사와 실제 설치·원격 연결 검증은 구분한다.
 
 ## 개발 환경
 

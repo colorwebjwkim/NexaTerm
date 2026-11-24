@@ -23,7 +23,7 @@ Rust와 Tauri 2, Svelte, TypeScript, xterm.js로 구성되어 있습니다. 현�
 
 WebView2가 없는 PC에서는 현재 설치 프로그램이 인터넷으로 런타임을 내려받아 설치합니다. 실행 파일만 복사해 사용하는 경우 WebView2가 미리 설치되어 있어야 합니다. WebView2가 없는 오프라인 PC에는 별도의 오프라인 런타임 설치가 필요합니다.
 
-설치 패키지가 제공된 경우 MSI 또는 NSIS 설치 파일을 실행합니다. 소스에서 직접 빌드하려면 아래 개발 환경과 명령을 사용합니다.
+[GitHub Releases](https://github.com/colorwebjwkim/NexaTerm/releases/latest)에서 Windows x64용 NSIS 설치 파일(`*-setup.exe`) 또는 MSI를 내려받아 실행합니다. `SHA256SUMS.txt`로 파일 무결성을 확인할 수 있습니다. 소스에서 직접 빌드하려면 아래 개발 환경과 명령을 사용합니다.
 
 ## 사용 방법
 
